@@ -1,26 +1,49 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated class="bg-primary">
+      <q-toolbar>
+        <q-toolbar-title>
+          <router-link to="/">
+            <img
+              class="logo q-pt-sm"
+              src="./assets/Groupomania_Logos/icon-left-font-monochrome-white.svg"
+            />
+          </router-link>
+        </q-toolbar-title>
+        <router-link
+          to="/login"
+          class="text-white col-xl"
+          style="text-decoration: none;"
+        >
+          Déconnexion
+        </router-link>
+      </q-toolbar>
+    </q-header>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+    
+  </q-layout>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script></script>
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+<style lang="scss">
+@media (min-width: 599px) {
+  .logo {
+    width: 20%;
+  }
+  .login-form {
+    width: 100%;
   }
 }
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@media (max-width: 600px) {
+  .logo {
+    width: 100%;
+  }
+  .login-form {
+    width: 100%;
+  }
 }
 </style>
