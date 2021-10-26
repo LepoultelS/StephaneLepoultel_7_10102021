@@ -1,9 +1,9 @@
-require("dotenv").config();
 const validator = require("validator");
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bdd = require("../bdd_config/bdd_connexion");
+const userValidator = require("./user-regex");
 
 // Décode le token et récupère le UserID et le niveau d'acces
 let decodeToken = function (req) {
@@ -13,46 +13,56 @@ let decodeToken = function (req) {
   return decodedToken;
 };
 
-// Inscription
+// Inscription OK
 exports.signup = (req, res, next) => {
   // Récupération des info de la requête
   const name = req.body.name;
   const firstname = req.body.firstname;
   const email = req.body.email;
   const password = req.body.password;
+  // Vérification de la validité de l'adresse mail et du mot de passe
+  if (
+    userValidator.isGoodPassword(req.body.password) &&
+    validator.isEmail(String(email))
+  ) {
+    bcrypt
+      .hash(req.body.password, 10)
+      .then((hash) => {
+        let sql =
+          "INSERT INTO user (name, firstname, email, password) VALUES (?, ?, ?, ?)";
+        let inserts = [name, firstname, email, hash];
+        sql = mysql.format(sql, inserts);
 
-  // Vérification de la validité de l'adresse mail
-  if (validator.isEmail(String(email))) {
-    bcrypt.hash(password, 10, (error, hash) => {
-      // Préparation de la requête
-      let sql =
-        "INSERT INTO user (name, firstname, email, password) VALUES (?, ?, ?, ?)";
-      let inserts = [name, firstname, email, hash];
-      sql = mysql.format(sql, inserts);
-
-      const userSignup = bdd.query(sql, (error, user) => {
-        if (!error) {
-          res.status(201).json({
-            message: "L'utilisateur a été créé avec succès !",
-            token: jwt.sign(
-              { userId: user.insertId, niveau_acces: 0 },
-              process.env.JWT_KEY,
-              { expiresIn: process.env.JWT_EXPIRATION }
-            ),
-          });
-        } else {
-          return res
-            .status(409)
-            .json({ error: "Cet utilisateur existe déjà !" });
-        }
-      });
-    });
+        const userSignup = bdd.query(sql, (error, user) => {
+          console.log(req.body);
+          console.log(sql);
+          if (!error) {
+            res.status(201).json({
+              message: "L'utilisateur a été créé avec succès !",
+              token: jwt.sign(
+                { userId: user.insertId, admin: 0 },
+                process.env.JWT_KEY,
+                { expiresIn: process.env.JWT_EXPIRATION }
+              ),
+            });
+          } else {
+            return res
+              .status(409)
+              .json({ error: "Cet utilisateur existe déjà !" });
+          }
+        });
+      })
+      .catch((error) =>
+        res.status(400).json({ error: "Erreur dans l'inscription !" })
+      );
   } else {
-    return res.status(400).json({ error: "Votre email est invalide !" });
+    return res.status(400).json({
+      error: "Format d'email ou de mot de passe invalide",
+    });
   }
 };
 
-// Connexion
+// Connexion OK
 exports.login = (req, res, next) => {
   // Récupération des info de la requête
   const email = req.body.email;
@@ -70,29 +80,33 @@ exports.login = (req, res, next) => {
       if (error) {
         return res.status(400).json({ error: "Votre email est invalide !" });
       }
-      // email null
+      //utilisateur introuvable
       if (user.length === 0) {
         res
           .status(400)
           .json({ error: "Une erreur est survenue, utilisateur non trouvé !" });
       }
-
-      bcrypt.compare(password, user[0].mot_de_passe).then((valid) => {
-        if (!valid) {
-          // Les deux mots de passes ne correspondent pas
-          return res.status(400).json({ error: "Mot de passe invalide !" });
-        }
-        // Les mots de passe correspondent
-        res.status(200).json({
-          message: "Vous êtes désormais connecté !",
-          token: jwt.sign(
-            { userId: user[0].id, admin: user[0].admin },
-            process.env.JWT_KEY,
-            { expiresIn: process.env.JWT_EXPIRATION }
-          ),
-        });
-      });
+      bcrypt
+        .compare(req.body.password, user[0].password)
+        .then((valid) => {
+          if (!valid) {
+            return res
+              .status(400)
+              .json({ message: "Mot de passe incorrect !" });
+          }
+          res.status(200).json({
+            userId: user._id,
+            token: jwt.sign(
+              { userId: user[0].id, admin: user[0].admin },
+              process.env.JWT_KEY,
+              { expiresIn: process.env.JWT_EXPIRATION }
+            ),
+          });
+        })
+        .catch((error) => res.status(500).json({ error }));
     });
+  } else {
+    return res.status(400).json({ error: "Votre email est invalide !" });
   }
 };
 
@@ -159,22 +173,19 @@ exports.updateOneUser = (req, res, next) => {
             let inserts = [hash, userId];
             sql = mysql.format(sql, inserts);
 
-            const userUpdatePassword = bdd.query(
-              sql,
-              (error, result) => {
-                if (error) {
-                  res.status(400).json({
-                    error:
-                      "La mise à jour des informations de l'utilisateur a échoué",
-                  });
-                } else {
-                  res.status(200).json({
-                    message:
-                      "Informations de l'utilisateur mis à jour avec succès !",
-                  });
-                }
+            const userUpdatePassword = bdd.query(sql, (error, result) => {
+              if (error) {
+                res.status(400).json({
+                  error:
+                    "La mise à jour des informations de l'utilisateur a échoué",
+                });
+              } else {
+                res.status(200).json({
+                  message:
+                    "Informations de l'utilisateur mis à jour avec succès !",
+                });
               }
-            );
+            });
           });
         }
       });
