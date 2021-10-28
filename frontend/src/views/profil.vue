@@ -23,10 +23,7 @@
     </q-header>
 
     <q-page-container v-if="isConnect">
-      <h1 class="text-center text-primary">Connecté</h1>
-      <router-link to="/profil" style="text-decoration: none;">
-        <p class="text-center text-primary">Vers le profil de {{ user.firstname }}</p>
-      </router-link>
+      <h1 class="text-center text-primary">Profil de {{ user.firstname }}</h1>
     </q-page-container>
   </q-layout>
 </template>
@@ -34,6 +31,7 @@
 <script>
 import axios from "axios";
 import jwt from "jsonwebtoken";
+// import {connectedClient} from "@/services/auth.js"
 
 export default {
   name: "home",
@@ -53,9 +51,13 @@ export default {
 
   mounted() {
     if (this.isConnect === true) {
+      const secretKey = process.env.JWT_KEY
       // Récupération du token dans le localstorage
       const token = JSON.parse(localStorage.groupomaniaUser).token;
-      let decodedToken = jwt.verify(token, "VINiIcauYF6fZ8r1rKGw");
+              //                      //
+              // TODO Gérer le secret //
+              //                      //
+      let decodedToken = jwt.verify(token, secretKey);
       this.sessionUserId = decodedToken.userId;
       this.sessionUserAcces = decodedToken.admin;
       this.getUser();
