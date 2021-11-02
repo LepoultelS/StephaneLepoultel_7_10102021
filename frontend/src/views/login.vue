@@ -169,7 +169,7 @@ export default {
             JSON.stringify(groupomaniaUser)
           );
           router.push({ name: "home" });
-          location.reload;
+          location.reload();
         })
         .catch(function(erreur) {
           console.log(erreur, "Problème de connexion");

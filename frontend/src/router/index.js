@@ -8,22 +8,42 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: home
+    get component() {
+      if (localStorage.groupomaniaUser == undefined) {
+        return login;
+      }
+      return home;
+    },
   },
   {
     path: '/signup',
     name: 'signup',
-    component: signup
+    get component() {
+      if (localStorage.groupomaniaUser == undefined) {
+        return signup;
+      }
+      return home;
+    },
   },
   {
     path: '/login',
     name: 'login',
-    component: login
+    get component() {
+      if (localStorage.groupomaniaUser == undefined) {
+        return login;
+      }
+      return home;
+    },
   },
   {
     path: '/profil',
     name: 'profil',
-    component: profil
+    get component() {
+      if (localStorage.groupomaniaUser == undefined) {
+        return login;
+      }
+      return profil;
+    },
   },
 ]
 

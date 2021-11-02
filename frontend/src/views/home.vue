@@ -22,28 +22,31 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container v-if="isConnect">
-      <h1 class="text-center text-primary">Connecté</h1>
-      <router-link to="/profil" style="text-decoration: none;">
-        <p class="text-center text-primary">Vers le profil de {{ user.firstname }}</p>
-      </router-link>
+    <q-page-container>
+      <addPost :user="user" />
+      <div v-for="post in posts" v-bind:key="post.id">
+        <post :post="post" :user="user" />
+      </div>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
+import addPost from "../components/addPost.vue";
+import post from "../components/post.vue";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 
 export default {
   name: "home",
 
-  components: {},
+  components: { addPost, post },
 
   data() {
     return {
       isConnect: false,
       user: [],
+      posts: [],
     };
   },
 
@@ -55,10 +58,11 @@ export default {
     if (this.isConnect === true) {
       // Récupération du token dans le localstorage
       const token = JSON.parse(localStorage.groupomaniaUser).token;
-      let decodedToken = jwt.verify(token, "VINiIcauYF6fZ8r1rKGw");
+      let decodedToken = jwt.verify(token, process.env.VUE_APP_JWT_KEY);
       this.sessionUserId = decodedToken.userId;
       this.sessionUserAcces = decodedToken.admin;
       this.getUser();
+      this.getPosts();
     }
   },
 
@@ -72,7 +76,9 @@ export default {
       }
     },
     disconnect() {
-      localStorage.clear();
+      localStorage.removeItem("groupomaniaUser");
+      location.href = "/";
+      location.reload();
       console.log("Utilisateur déconnecté !");
     },
     getUser() {
@@ -82,10 +88,26 @@ export default {
       axios({
         method: "get",
         url: `http://localhost:3000/users/${userId}`,
-        headers: {Authorization: `Bearer ${token}`},
+        headers: { Authorization: `Bearer ${token}` },
       })
         .then((response) => {
           this.user = response.data;
+        })
+        .catch((erreur) => {
+          console.log(erreur);
+        });
+    },
+    getPosts() {
+      const token = JSON.parse(localStorage.groupomaniaUser).token;
+
+      axios({
+        method: "get",
+        url: `http://localhost:3000/posts`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          this.posts = response.data;
+          console.log(this.posts);
         })
         .catch((erreur) => {
           console.log(erreur);

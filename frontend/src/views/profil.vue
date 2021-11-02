@@ -22,8 +22,10 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container v-if="isConnect">
-      <h1 class="text-center text-primary">Profil de {{ user.firstname }}</h1>
+    <q-page-container>
+      <div v-if="isConnect">
+        <h1 class="text-center text-primary">Profil de {{ user.firstname }}</h1>
+      </div>
     </q-page-container>
   </q-layout>
 </template>
@@ -51,13 +53,9 @@ export default {
 
   mounted() {
     if (this.isConnect === true) {
-      const secretKey = process.env.JWT_KEY
       // Récupération du token dans le localstorage
       const token = JSON.parse(localStorage.groupomaniaUser).token;
-              //                      //
-              // TODO Gérer le secret //
-              //                      //
-      let decodedToken = jwt.verify(token, secretKey);
+      let decodedToken = jwt.verify(token, process.env.VUE_APP_JWT_KEY);
       this.sessionUserId = decodedToken.userId;
       this.sessionUserAcces = decodedToken.admin;
       this.getUser();
@@ -74,7 +72,9 @@ export default {
       }
     },
     disconnect() {
-      localStorage.clear();
+      localStorage.removeItem("groupomaniaUser");
+      location.href = "/";
+      location.reload();
       console.log("Utilisateur déconnecté !");
     },
     getUser() {
@@ -84,7 +84,7 @@ export default {
       axios({
         method: "get",
         url: `http://localhost:3000/users/${userId}`,
-        headers: {Authorization: `Bearer ${token}`},
+        headers: { Authorization: `Bearer ${token}` },
       })
         .then((response) => {
           this.user = response.data;
