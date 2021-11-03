@@ -10,16 +10,16 @@
                 {{ post.postCreateByUserName }}
               </div>
               <div v-if="isMine">
-                 <q-icon name="delete" />
+                <q-icon
+                  id="delete"
+                  name="delete"
+                  @click="deletePost(this.post.postId)"
+                />
               </div>
             </div>
             <div class="text-h5 q-mt-sm q-mb-xs q-mr-md">
               {{ post.postTitle }}
-              <q-badge
-                class="q-pa-sm"
-                align="middle"
-                :color="colorBadge"
-              >
+              <q-badge class="q-pa-sm" align="middle" :color="colorBadge">
                 {{ post.postTag }}
               </q-badge>
             </div>
@@ -45,6 +45,7 @@
 
 <script>
 import jwt from "jsonwebtoken";
+import axios from "axios";
 
 export default {
   name: "post",
@@ -65,6 +66,7 @@ export default {
 
   created() {
     this.checkIsMine();
+    console.log(this.user);
   },
 
   methods: {
@@ -88,27 +90,47 @@ export default {
       };
       return event.toLocaleDateString("fr-FR", options);
     },
+    deletePost(id) {
+      const postId = id;
+      const token = JSON.parse(localStorage.groupomaniaUser).token;
+
+      axios({
+        method: "delete",
+        url: `http://localhost:3000/posts/${postId}`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          console.log(response);
+          location.reload();
+        })
+        .catch((erreur) => {
+          console.log(erreur);
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
+#delete {
+  cursor: pointer;
+}
 .bg-travail {
-  background: #EB0000;
+  background: #eb0000;
 }
 .bg-musique {
   background: #008246;
 }
 .bg-film {
-  background: #8700CF;
+  background: #8700cf;
 }
 .bg-sortie {
-  background: #EB00B5;
+  background: #eb00b5;
 }
 .bg-sport {
-  background: #D88B07;
+  background: #d88b07;
 }
 .bg-jeux {
-  background: #000BCF;
+  background: #000bcf;
 }
 </style>

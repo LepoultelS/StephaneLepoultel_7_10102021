@@ -196,7 +196,7 @@ exports.deletePost = (req, res, next) => {
   const tokenInfos = decodeToken(req);
   const userId = tokenInfos[0];
   const admin = tokenInfos[1];
-  const postId = req.params.id;
+  const postId = parseInt(req.params.id);
 
   // Si l'admin supprime le post
   if (admin === 1) {
@@ -226,23 +226,19 @@ exports.deletePost = (req, res, next) => {
     let sql = "DELETE FROM post WHERE id = ? AND user_id = ?;";
     let inserts = [postId, userId];
     sql = mysql.format(sql, inserts);
+    console.log(sql);
 
-    if (!error) {
-      const postDeleteUser = bdd.query(sql, (error, result) => {
-        if (result.affectedRows === 0) {
-          res.status(400).json({
-            message: "Vous n'êtes pas autorisé à supprimer ce post !",
-          });
-        } else {
-          res.status(200).json({
-            message: "Votre post a été supprimé !",
-          });
-        }
-      });
-    } else {
-      res.status(400).json({
-        message: "Une erreur est survenue, le post n'a pas été trouvé",
-      });
-    }
+    console.log("tata");
+    const postDeleteUser = bdd.query(sql, (error, result) => {
+      if (result.affectedRows === 0) {
+        res.status(400).json({
+          message: "Vous n'êtes pas autorisé à supprimer ce post !",
+        });
+      } else {
+        res.status(200).json({
+          message: "Votre post a été supprimé !",
+        });
+      }
+    });
   }
 };
