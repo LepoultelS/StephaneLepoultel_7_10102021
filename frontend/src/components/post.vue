@@ -10,7 +10,7 @@
                 {{ post.postCreateByUserFirstname }}
                 {{ post.postCreateByUserName }}
               </div>
-              <div v-if="isPostMine">
+              <div v-if="isPostMine || user.admin == 1">
                 <q-icon
                   id="delete"
                   name="delete"

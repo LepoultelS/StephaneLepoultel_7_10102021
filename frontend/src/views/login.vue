@@ -169,6 +169,7 @@ export default {
             JSON.stringify(groupomaniaUser)
           );
           router.push({ name: "home" });
+          // TODO
           location.reload();
         })
         .catch(function(erreur) {

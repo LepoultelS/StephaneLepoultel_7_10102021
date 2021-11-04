@@ -92,7 +92,7 @@ exports.login = (req, res, next) => {
           if (!valid) {
             return res
               .status(400)
-              .json({ message: "Mot de passe incorrect !" });
+              .json({ error: "Mot de passe incorrect !" });
           }
           res.status(200).json({
             userId: user._id,
