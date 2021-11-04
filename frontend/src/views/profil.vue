@@ -88,6 +88,7 @@ export default {
       this.sessionUserAcces = decodedToken.admin;
       this.getUser();
       this.getUserPosts();
+      this.getUserComments();
     }
   },
 
@@ -106,6 +107,7 @@ export default {
       location.reload();
       console.log("Utilisateur déconnecté !");
     },
+
     getUser() {
       const userId = this.sessionUserId;
       const token = JSON.parse(localStorage.groupomaniaUser).token;
@@ -134,6 +136,25 @@ export default {
         .then((response) => {
           this.posts = response.data;
           this.numPosts = this.posts.length;
+        })
+        .catch((erreur) => {
+          console.log(erreur);
+        });
+    },
+    getUserComments() {
+      const token = JSON.parse(localStorage.groupomaniaUser).token;
+
+      axios({
+        method: "get",
+        url: `http://localhost:3000/comments/`,
+        data: {
+          id: this.user.id,
+        },
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          this.comment = response.data;
+          this.numCom = this.comment.length;
         })
         .catch((erreur) => {
           console.log(erreur);

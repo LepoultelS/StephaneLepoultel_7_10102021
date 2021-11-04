@@ -67,6 +67,27 @@ exports.getComment = (req, res, next) => {
   });
 };
 
+// Récupération des info d'un commentaires
+exports.getAllComments = (req, res, next) => {
+  const tokenInfos = decodeToken(req);
+  const userId = tokenInfos[0];
+
+  let sql = `SELECT * FROM comment WHERE user_id = ?`;
+  const inserts = [userId];
+  sql = mysql.format(sql, inserts);
+
+  const getOneUserComments = bdd.query(sql, (error, comments) => {
+    if (!error) {
+      res.status(200).json(comments);
+    } else {
+      console.log(error);
+      res.status(400).json({
+        error: "Une erreur est survenue, aucun commentaire trouvé !",
+      });
+    }
+  });
+};
+
 // Suppression d'un commentaire
 exports.deleteComment = (req, res, next) => {
   const tokenInfos = decodeToken(req);
