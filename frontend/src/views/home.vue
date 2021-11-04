@@ -49,13 +49,10 @@
           to="/profil"
           style="text-decoration: none;"
           v-if="!searchTag && !searchName"
-          class="text-primary text-centerq-px-lg"
+          class="text-primary text-center q-px-lg"
         >
           <q-btn class="text-primary col-xl bg-white q-mt-lg">
             Vers le profil de {{ user.firstname }} {{ user.name }}
-            <template v-slot:prepend>
-              <q-icon name="account_circle" />
-            </template>
           </q-btn>
         </router-link>
       </div>

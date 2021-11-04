@@ -23,32 +23,60 @@
     </q-header>
 
     <q-page-container>
-      <div v-if="isConnect">
-        <h1 class="text-center text-primary">Profil de {{ user.firstname }}</h1>
+      <div>
+        <p class="text-center text-primary text-h4 q-pt-lg">
+          {{ user.firstname }} {{ user.name }}
+        </p>
+      </div>
+      <div class="row text-center q-py-xl">
+        <div v-if="numPosts <= 1" class="col">
+          {{ numPosts }}<br />post publié
+        </div>
+        <div v-else class="col">{{ numPosts }}<br />posts publiés</div>
+        <q-separator vertical color="primary" />
+        <div v-if="numCom <= 1" class="col">
+          {{ numCom }}<br />commentaire envoyé
+        </div>
+        <div v-else class="col">{{ numCom }}<br />commentaires envoyés</div>
+      </div>
+      <addPost :user="user" />
+      <div v-for="post in posts" v-bind:key="post.id">
+        <post :post="post" :user="user" />
+      </div>
+      <div class="text-center">
+        <q-btn class="text-white col-xl bg-negative q-my-lg">
+          Supprimer le compte
+        </q-btn>
       </div>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
+import addPost from "../components/addPost.vue";
+import post from "../components/post.vue";
 import axios from "axios";
 import jwt from "jsonwebtoken";
-// import {connectedClient} from "@/services/auth.js"
 
 export default {
   name: "home",
 
-  components: {},
+  components: { addPost, post },
 
   data() {
     return {
       isConnect: false,
       user: [],
+      posts: [],
+      userId: "",
+      numPosts: 0,
+      numCom: 0,
     };
   },
 
   created() {
     this.connectedUser();
+    this.useId = this.user.id;
   },
 
   mounted() {
@@ -59,6 +87,7 @@ export default {
       this.sessionUserId = decodedToken.userId;
       this.sessionUserAcces = decodedToken.admin;
       this.getUser();
+      this.getUserPosts();
     }
   },
 
@@ -88,6 +117,23 @@ export default {
       })
         .then((response) => {
           this.user = response.data;
+        })
+        .catch((erreur) => {
+          console.log(erreur);
+        });
+    },
+    getUserPosts() {
+      const token = JSON.parse(localStorage.groupomaniaUser).token;
+      const userId = this.sessionUserId;
+
+      axios({
+        method: "get",
+        url: `http://localhost:3000/posts/${userId}`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          this.posts = response.data;
+          this.numPosts = this.posts.length;
         })
         .catch((erreur) => {
           console.log(erreur);
