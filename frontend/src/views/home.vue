@@ -23,19 +23,52 @@
     </q-header>
 
     <q-page-container>
-      <q-input
-        v-model="search"
-        label="Recherche par tag"
-        class="q-px-md"
-        hint="travail, musique, film, sortie, sport, jeux"
-      >
-        <template v-slot:prepend>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-      <addPost v-if="!search" :user="user" />
+      <div class="row">
+        <q-input
+          v-model="searchName"
+          label="Recherche par Nom d'auteur"
+          class="q-px-md col-12 col-sm-6"
+        >
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+        <q-input
+          v-model="searchTag"
+          label="Recherche par tag"
+          class="q-px-md col-12 col-sm-6"
+          hint="travail, musique, film, sortie, sport, jeux"
+        >
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </div>
+      <div class="text-center">
+        <router-link
+          to="/profil"
+          style="text-decoration: none;"
+          v-if="!searchTag && !searchName"
+          class="text-primary text-centerq-px-lg"
+        >
+          <q-btn class="text-primary col-xl bg-white q-mt-lg">
+            Vers le profil de {{ user.firstname }} {{ user.name }}
+            <template v-slot:prepend>
+              <q-icon name="account_circle" />
+            </template>
+          </q-btn>
+        </router-link>
+      </div>
+      <addPost v-if="!searchTag && !searchName" :user="user" />
       <div v-for="post in posts" v-bind:key="post.id">
-        <post v-if="post.postTag.includes(search)" :post="post" :user="user" />
+        <post
+          v-if="
+            post.postTag.includes(searchTag) &&
+              post.postCreateByUserName.includes(searchName)
+          "
+          :post="post"
+          :user="user"
+        />
       </div>
     </q-page-container>
   </q-layout>
@@ -57,7 +90,8 @@ export default {
       isConnect: false,
       user: [],
       posts: [],
-      search: "",
+      searchTag: "",
+      searchName: "",
     };
   },
 

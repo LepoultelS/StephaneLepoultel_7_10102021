@@ -1,5 +1,5 @@
 <template>
-  <div class="login row justify-center items-center q-py-xl">
+  <div class="login row justify-center items-center q-pb-xl q-pt-md">
     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7 col-xl-7">
       <div class="row">
         <q-card square class="login-form flat">

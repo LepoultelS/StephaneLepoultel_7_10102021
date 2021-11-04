@@ -6,6 +6,7 @@
           <q-card-section class="q-pt-xs">
             <div class="row">
               <div class="text-overline col">
+                <q-icon size="md" color="primary" name="account_circle" />
                 {{ post.postCreateByUserFirstname }}
                 {{ post.postCreateByUserName }}
               </div>
@@ -47,6 +48,7 @@
             >
               <div class="row text-overline">
                 <div class="col">
+                  <q-icon size="md" color="primary" name="account_circle" />
                   {{ comment.commentCreateByUserFirstname }}
                   {{ comment.commentCreateByUserName }}
                 </div>
