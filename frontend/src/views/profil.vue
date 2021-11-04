@@ -44,7 +44,7 @@
         <post :post="post" :user="user" />
       </div>
       <div class="text-center">
-        <q-btn class="text-white col-xl bg-negative q-my-lg">
+        <q-btn class="text-white col-xl bg-negative q-my-lg" @click="deleteUser()">
           Supprimer le compte
         </q-btn>
       </div>
@@ -155,6 +155,25 @@ export default {
         .then((response) => {
           this.comment = response.data;
           this.numCom = this.comment.length;
+        })
+        .catch((erreur) => {
+          console.log(erreur);
+        });
+    },
+    deleteUser() {
+      const token = JSON.parse(localStorage.groupomaniaUser).token;
+      const userId = this.user.id;
+
+      axios({
+        method: "delete",
+        url: `http://localhost:3000/users/${userId}`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          console.log(response);
+          localStorage.removeItem("groupomaniaUser");
+          this.$router.push('/');
+          location.reload();
         })
         .catch((erreur) => {
           console.log(erreur);
