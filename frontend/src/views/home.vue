@@ -23,9 +23,19 @@
     </q-header>
 
     <q-page-container>
-      <addPost :user="user" />
+      <q-input
+        v-model="search"
+        label="Recherche par tag"
+        class="q-px-md"
+        hint="travail, musique, film, sortie, sport, jeux"
+      >
+        <template v-slot:prepend>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+      <addPost v-if="!search" :user="user" />
       <div v-for="post in posts" v-bind:key="post.id">
-        <post :post="post" :user="user" />
+        <post v-if="post.postTag.includes(search)" :post="post" :user="user" />
       </div>
     </q-page-container>
   </q-layout>
@@ -47,6 +57,7 @@ export default {
       isConnect: false,
       user: [],
       posts: [],
+      search: "",
     };
   },
 
@@ -106,7 +117,7 @@ export default {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((response) => {
-          console.log(response.data)
+          console.log(response.data);
           this.posts = response.data;
         })
         .catch((erreur) => {

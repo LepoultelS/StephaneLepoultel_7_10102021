@@ -117,13 +117,10 @@ export default {
     user: [],
   },
 
-  mounted() {
-    this.colorBadge = this.post.postTag;
-  },
-
   created() {
     this.checkIsPostMine();
     this.getComments();
+    this.colorBadge = this.post.postTag;
   },
 
   methods: {
