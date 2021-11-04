@@ -137,7 +137,7 @@ exports.getOnePost = (req, res, next) => {
 
   const sqlPost = ` SELECT    user.id AS postCreateByUserId,
                               user.name AS postCreateByUserName,
-                              user.firtname AS postCreateByUserFirstname,
+                              user.firstname AS postCreateByUserFirstname,
                               post.id AS postId,
                               post.creation_date AS postCreationDate,
                               post.title AS postTitle,
