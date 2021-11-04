@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const postsCtrl = require("../controllers/posts");
-
 const auth = require("../middleware/auth");
 
 router.post("/", auth, postsCtrl.createPost);

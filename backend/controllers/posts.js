@@ -226,9 +226,7 @@ exports.deletePost = (req, res, next) => {
     let sql = "DELETE FROM post WHERE id = ? AND user_id = ?;";
     let inserts = [postId, userId];
     sql = mysql.format(sql, inserts);
-    console.log(sql);
 
-    console.log("tata");
     const postDeleteUser = bdd.query(sql, (error, result) => {
       if (result.affectedRows === 0) {
         res.status(400).json({

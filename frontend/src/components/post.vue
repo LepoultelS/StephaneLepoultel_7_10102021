@@ -9,7 +9,7 @@
                 {{ post.postCreateByUserFirstname }}
                 {{ post.postCreateByUserName }}
               </div>
-              <div v-if="isMine">
+              <div v-if="isPostMine">
                 <q-icon
                   id="delete"
                   name="delete"
@@ -28,13 +28,65 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="row flex flex-center text-caption text-grey">
+          <q-card-section
+            class="row flex flex-center text-caption text-secondary"
+          >
             <div class="col">
               {{ dateFormat(post.postCreationDate) }}
             </div>
             <div class="col-5"></div>
-            <div>
-              0 Commentaires
+            <div @click="iscommentChange()" id="commentShow">
+              {{ numcomment }} Commentaires
+            </div>
+          </q-card-section>
+          <q-card-section v-if="iscomment">
+            <div
+              v-for="comment in comment"
+              v-bind:key="comment.id"
+              class="text-caption q-pt-sm"
+            >
+              <div class="row text-overline">
+                <div class="col">
+                  {{ comment.commentCreateByUserFirstname }}
+                  {{ comment.commentCreateByUserName }}
+                </div>
+                <div
+                  v-if="
+                    comment.commentCreateByUserId == user.id || isCommentMine
+                  "
+                >
+                  <q-icon
+                    id="delete"
+                    name="delete"
+                    @click="deleteComment(comment.commentId)"
+                  />
+                </div>
+              </div>
+              <div>
+                {{ comment.commentMessage }}
+              </div>
+              <div class="col text-caption text-secondary">
+                {{ dateFormat(comment.commentCreationDate) }}
+              </div>
+              <q-separator />
+            </div>
+            <div
+              class="row flex flex-center text-caption text-secondary q-pt-lg"
+            >
+              <q-input
+                dense
+                v-model="commentText"
+                type="text"
+                label="Commenter"
+                class="col q-pr-lg"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="add_comment" />
+                </template>
+              </q-input>
+              <q-btn @click="addComment()">
+                Envoyer
+              </q-btn>
             </div>
           </q-card-section>
         </q-card>
@@ -52,7 +104,12 @@ export default {
 
   data: () => ({
     colorBadge: "",
-    isMine: false,
+    isPostMine: false,
+    isCommentMine: false,
+    iscomment: false,
+    commentText: "",
+    comment: [],
+    numcomment: "",
   }),
 
   props: {
@@ -65,18 +122,26 @@ export default {
   },
 
   created() {
-    this.checkIsMine();
-    console.log(this.user);
+    this.checkIsPostMine();
+    this.getComments();
   },
 
   methods: {
-    checkIsMine() {
+    iscommentChange() {
+      if (this.iscomment == false) {
+        this.iscomment = true;
+      } else {
+        this.iscomment = false;
+      }
+    },
+    checkIsPostMine() {
       const token = JSON.parse(localStorage.groupomaniaUser).token;
       let decodedToken = jwt.verify(token, process.env.VUE_APP_JWT_KEY);
       this.sessionUserId = decodedToken.userId;
 
       if (this.post.postCreateByUserId == this.sessionUserId) {
-        this.isMine = true;
+        this.isPostMine = true;
+        this.isCommentMine = true;
       }
     },
     dateFormat(date) {
@@ -90,6 +155,7 @@ export default {
       };
       return event.toLocaleDateString("fr-FR", options);
     },
+
     deletePost(id) {
       const postId = id;
       const token = JSON.parse(localStorage.groupomaniaUser).token;
@@ -107,12 +173,67 @@ export default {
           console.log(erreur);
         });
     },
+    deleteComment(id) {
+      const commentId = id;
+      const token = JSON.parse(localStorage.groupomaniaUser).token;
+
+      axios({
+        method: "delete",
+        url: `http://localhost:3000/comments/${commentId}`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          console.log(response);
+          location.reload();
+        })
+        .catch((erreur) => {
+          console.log(erreur);
+        });
+    },
+    addComment() {
+      const token = JSON.parse(localStorage.groupomaniaUser).token;
+
+      axios({
+        method: "post",
+        url: "http://localhost:3000/comments",
+        headers: { Authorization: `Bearer ${token}` },
+        data: {
+          postId: this.post.postId,
+          message: this.commentText,
+        },
+      })
+        .then(function(response) {
+          console.log(response);
+          location.reload();
+        })
+        .catch(function(erreur) {
+          console.log(erreur);
+        });
+    },
+    getComments() {
+      const token = JSON.parse(localStorage.groupomaniaUser).token;
+      const postId = this.post.postId;
+
+      axios({
+        method: "get",
+        url: `http://localhost:3000/comments/${postId}`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          this.comment = response.data;
+          this.numcomment = this.comment.length;
+        })
+        .catch((erreur) => {
+          console.log(erreur);
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
-#delete {
+#delete,
+#commentShow {
   cursor: pointer;
 }
 .bg-travail {

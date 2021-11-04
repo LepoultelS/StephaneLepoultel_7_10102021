@@ -13,7 +13,7 @@
                 class="q-py-sm"
               >
                 <template v-slot:prepend>
-                  <q-icon name="add_comment" />
+                  <q-icon name="title" />
                 </template>
               </q-input>
               <q-input

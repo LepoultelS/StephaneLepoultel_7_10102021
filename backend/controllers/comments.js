@@ -34,10 +34,42 @@ exports.commentPost = (req, res, next) => {
   });
 };
 
+// Récupération des info d'un commentaires
+exports.getComment = (req, res, next) => {
+  const tokenInfos = decodeToken(req);
+  const postId = req.params.id;
+
+  let sql = `SELECT     user.id AS commentCreateByUserId,
+                        user.name AS commentCreateByUserName,
+                        user.firstname AS commentCreateByUserFirstname,
+
+                        comment.id AS commentId,
+                        comment.creation_date AS commentCreationDate, 
+                        comment.message AS commentMessage
+              FROM      comment
+              JOIN      user 
+              ON        comment.user_id = user.id
+              WHERE     post_id = ?
+              GROUP BY  comment.id 
+              ORDER BY  commentCreationDate DESC;`;
+  const inserts = [postId];
+  sql = mysql.format(sql, inserts);
+
+  const getOnePostComments = bdd.query(sql, (error, comments) => {
+    if (!error) {
+      res.status(200).json(comments);
+    } else {
+      console.log(error);
+      res.status(400).json({
+        error: "Une erreur est survenue, aucun commentaire trouvé !",
+      });
+    }
+  });
+};
+
 // Suppression d'un commentaire
 exports.deleteComment = (req, res, next) => {
   const tokenInfos = decodeToken(req);
-  const userId = tokenInfos[0];
   const admin = tokenInfos[1];
 
   const commentId = req.params.id;
@@ -62,8 +94,8 @@ exports.deleteComment = (req, res, next) => {
     });
     // Si l'auteur supprime le commentaire
   } else {
-    let sql = "DELETE FROM comment WHERE id = ? AND user_id = ?";
-    let inserts = [commentId, userId];
+    let sql = "DELETE FROM comment WHERE id = ?";
+    let inserts = [commentId];
     sql = mysql.format(sql, inserts);
 
     const commentDeleteUser = bdd.query(sql, (error, result) => {

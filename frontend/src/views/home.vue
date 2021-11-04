@@ -106,8 +106,8 @@ export default {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((response) => {
+          console.log(response.data)
           this.posts = response.data;
-          console.log(this.posts);
         })
         .catch((erreur) => {
           console.log(erreur);
