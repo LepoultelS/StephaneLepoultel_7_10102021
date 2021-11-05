@@ -1,10 +1,9 @@
 const mysql = require("mysql");
 const bdd = mysql.createPool({
-  // TODO
-  host: process.env.SQL_BDD_HOST,
-  user: process.env.SQL_BDD_USER,
-  password: process.env.SQL_BDD_PASSWORD,
-  database: process.env.SQL_BDD_NAME,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PSWD,
+  database: process.env.DB_NAME,
 });
 
 // Test de la connexion avec la base de données

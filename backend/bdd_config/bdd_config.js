@@ -3,21 +3,21 @@ const mysql = require("mysql");
 
 // Paramètres de connexion au serveur MySQL pour la création de la base de données
 const mysqlConnexion = mysql.createConnection({
-  host: process.env.SQL_BDD_HOST,
-  user: process.env.SQL_BDD_USER,
-  password: process.env.SQL_BDD_PASSWORD,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PSWD,
 });
 
 // Paramètres de connexion au serveur MySQL pour la création des tables
 const bdd = mysql.createConnection({
-  host: process.env.SQL_BDD_HOST,
-  user: process.env.SQL_BDD_USER,
-  password: process.env.SQL_BDD_PASSWORD,
-  database: process.env.SQL_BDD_NAME,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PSWD,
+  database: process.env.DB_NAME,
 });
 
 // Base de données
-const database = `CREATE DATABASE ${process.env.SQL_BDD_NAME};`;
+const database = `CREATE DATABASE ${process.env.DB_NAME};`;
 
 // Table des utilisateurs
 const tableUsers =
@@ -71,7 +71,7 @@ const bddCreation = function () {
             return console.error("error: " + err.message);
           }
           console.log(
-            `La base de données "${process.env.SQL_BDD_NAME}" a été créée avec succès !`
+            `La base de données "${process.env.DB_NAME}" a été créée avec succès !`
           );
           console.log("-");
           resolve(true);
