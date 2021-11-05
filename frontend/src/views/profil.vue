@@ -44,7 +44,10 @@
         <post :post="post" :user="user" />
       </div>
       <div class="text-center">
-        <q-btn class="text-white col-xl bg-negative q-my-lg" @click="deleteUser()">
+        <q-btn
+          class="text-white col-xl bg-negative q-my-lg"
+          @click="deleteUser()"
+        >
           Supprimer le compte
         </q-btn>
       </div>

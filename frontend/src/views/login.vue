@@ -174,7 +174,7 @@ export default {
             "groupomaniaUser",
             JSON.stringify(groupomaniaUser)
           );
-          router.push({ path: '/' });
+          router.push({ path: "/" });
         })
         .catch(function(erreur) {
           console.log(erreur, "Problème de connexion");
