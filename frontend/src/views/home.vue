@@ -76,6 +76,7 @@ import addPost from "../components/addPost.vue";
 import post from "../components/post.vue";
 import axios from "axios";
 import jwt from "jsonwebtoken";
+import router from "../router/index";
 
 export default {
   name: "home",
@@ -119,8 +120,7 @@ export default {
     },
     disconnect() {
       localStorage.removeItem("groupomaniaUser");
-      location.href = "/";
-      location.reload();
+      router.push({ path: "/login" });
       console.log("Utilisateur déconnecté !");
     },
     getUser() {

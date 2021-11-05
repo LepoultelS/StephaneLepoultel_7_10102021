@@ -152,7 +152,7 @@ export default {
         },
       })
         .then(function() {
-          router.push({ name: "login" });
+          router.push({ path: "/login" });
         })
         .catch(function(erreur) {
           console.log(erreur);

@@ -61,6 +61,7 @@
 
 <script>
 import axios from "axios";
+import router from "../router/index";
 
 export default {
   name: "addPost",
@@ -92,7 +93,7 @@ export default {
         },
       })
         .then(function() {
-          location.reload();
+          router.go();
         })
         .catch(function(erreur) {
           console.log(erreur);

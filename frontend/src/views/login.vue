@@ -168,9 +168,7 @@ export default {
             "groupomaniaUser",
             JSON.stringify(groupomaniaUser)
           );
-          router.push({ name: "home" });
-          // TODO
-          location.reload();
+          router.push({ path: '/' });
         })
         .catch(function(erreur) {
           console.log(erreur, "Problème de connexion");

@@ -102,6 +102,7 @@
 <script>
 import jwt from "jsonwebtoken";
 import axios from "axios";
+import router from "../router/index";
 
 export default {
   name: "post",
@@ -168,7 +169,7 @@ export default {
       })
         .then((response) => {
           console.log(response);
-          location.reload();
+          router.go();
         })
         .catch((erreur) => {
           console.log(erreur);
@@ -185,7 +186,7 @@ export default {
       })
         .then((response) => {
           console.log(response);
-          location.reload();
+          router.go();
         })
         .catch((erreur) => {
           console.log(erreur);
@@ -203,9 +204,8 @@ export default {
           message: this.commentText,
         },
       })
-        .then(function(response) {
-          console.log(response);
-          location.reload();
+        .then(function() {
+          router.go();
         })
         .catch(function(erreur) {
           console.log(erreur);
