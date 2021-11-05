@@ -95,6 +95,9 @@ export default {
 
   created() {
     this.connectedUser();
+    if (localStorage.groupomaniaUser == undefined) {
+      router.push({ path: "/login" });
+    }
   },
 
   mounted() {

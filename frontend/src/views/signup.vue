@@ -121,6 +121,12 @@ export default {
     isConnect: false,
   }),
 
+  created() {
+    if (localStorage.groupomaniaUser) {
+      router.push({ path: "/" });
+    }
+  },
+
   updated() {
     this.connectedUser();
   },

@@ -78,6 +78,9 @@ export default {
   created() {
     this.connectedUser();
     this.useId = this.user.id;
+    if (localStorage.groupomaniaUser == undefined) {
+      router.push({ path: "/login" });
+    }
   },
 
   mounted() {
