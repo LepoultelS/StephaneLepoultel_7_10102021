@@ -54,7 +54,9 @@
                 </div>
                 <div
                   v-if="
-                    comment.commentCreateByUserId == user.id || isCommentMine
+                    comment.commentCreateByUserId == user.id ||
+                      isCommentMine ||
+                      user.admin == 1
                   "
                 >
                   <q-icon
