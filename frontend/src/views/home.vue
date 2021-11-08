@@ -95,7 +95,7 @@ export default {
 
   created() {
     this.connectedUser();
-    if (localStorage.groupomaniaUser == undefined) {
+    if (localStorage.groupomaniaUser == null) {
       router.push({ path: "/login" });
     }
   },
@@ -115,11 +115,16 @@ export default {
   methods: {
     // Vérification de la présence d'un token
     connectedUser() {
-      if (localStorage.groupomaniaUser == undefined) {
-        this.isConnect = false;
-      } else {
-        this.isConnect = true;
-      }
+      // exemple de ternaire
+      this.isConnect = localStorage.groupomaniaUser == null ? false : true;
+
+      // a la place de :
+
+      // if (localStorage.groupomaniaUser == null) {
+      //   this.isConnect = false;
+      // } else {
+      //   this.isConnect = true;
+      // }
     },
     disconnect() {
       localStorage.removeItem("groupomaniaUser");

@@ -81,7 +81,7 @@ export default {
   created() {
     this.connectedUser();
     this.useId = this.user.id;
-    if (localStorage.groupomaniaUser == undefined) {
+    if (localStorage.groupomaniaUser == null) {
       router.push({ path: "/login" });
     }
   },
@@ -102,7 +102,7 @@ export default {
   methods: {
     // Vérification de la présence d'un token
     connectedUser() {
-      if (localStorage.groupomaniaUser == undefined) {
+      if (localStorage.groupomaniaUser == null) {
         this.isConnect = false;
       } else {
         this.isConnect = true;

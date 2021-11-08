@@ -134,7 +134,7 @@ export default {
   methods: {
     // Vérification de la présence d'un token
     connectedUser() {
-      if (localStorage.groupomaniaUser == undefined) {
+      if (localStorage.groupomaniaUser == null) {
         this.isConnect = false;
         console.log("Utilisateur non connecté !");
       } else {
