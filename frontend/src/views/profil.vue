@@ -43,7 +43,8 @@
       <div v-for="post in posts" v-bind:key="post.id">
         <post :post="post" :user="user" />
       </div>
-      <div class="text-center">
+      <!-- Suppression du compte admin impossible -->
+      <div class="text-center" v-if="user.admin != 1">
         <q-btn
           class="text-white col-xl bg-negative q-my-lg"
           @click="deleteUser()"

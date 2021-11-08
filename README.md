@@ -1,4 +1,4 @@
-# Projet OpenClassrooms n°7 StephaneLepoultel_7_10102021 
+# Projet OpenClassrooms n°7
 
 ## Création d'un réseau social d'entreprise pour Groupomania
 
@@ -37,3 +37,10 @@ Télécharger le repository et suivez les instructions ci-après pour installer 
 * Ouvrez votre navigateur et allez sur : `http://localhost:8080/`
 
 
+La création d'un compte admin n'étant pas accssible à tout le monde, les comptes créés ne le sont pas.
+Pour être admin il faut le modifier directement dans la base de données, pour ce faire :
+* Lancer un terminal
+* Se connecter à mysql avec la commande : `mysql -u root -p`
+* Renseigner votre mot de passe root
+* Utiliser la bonne base : `USE groupomania;`
+* Et enfin choisir le compte qui va devenir admin : `UPDATE user SET admin='1' WHERE id='1';`
