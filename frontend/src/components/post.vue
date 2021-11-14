@@ -14,10 +14,35 @@
                 <q-icon
                   id="delete"
                   name="delete"
-                  @click="deletePost(this.post.postId)"
+                  @click="confirmDeletePost = true"
                 />
               </div>
             </div>
+            <q-dialog v-model="confirmDeletePost" persistent>
+              <q-card>
+                <q-card-section class="row items-center q-pb-none">
+                  <div class="text-h6">Supprimer votre post</div>
+                  <q-space />
+                  <q-btn icon="close" flat round dense v-close-popup />
+                </q-card-section>
+                <q-card-section class="row items-center">
+                  <span class="q-mx-md text-justify">
+                    Êtes-vous sûr de vouloir supprimer votre post ? Cela
+                    supprimera automatiquement tous les commentaires. Vous ne
+                    serez plus en mesure de récupérer les informations.
+                  </span>
+                </q-card-section>
+                <q-card-actions align="right">
+                  <q-btn flat label="Annuler" color="primary" v-close-popup />
+                  <q-btn
+                    flat
+                    label="Je suis sûr"
+                    color="negative"
+                    @click="deletePost(this.post.postId)"
+                  />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
             <div class="text-h5 q-mt-sm q-mb-xs q-mr-md">
               {{ post.postTitle }}
               <q-badge class="q-pa-sm" align="middle" :color="colorBadge">
@@ -62,10 +87,34 @@
                   <q-icon
                     id="delete"
                     name="delete"
-                    @click="deleteComment(comment.commentId)"
+                    @click="confirmDeleteComm = true"
                   />
                 </div>
               </div>
+              <q-dialog v-model="confirmDeleteComm" persistent>
+              <q-card>
+                <q-card-section class="row items-center q-pb-none">
+                  <div class="text-h6">Supprimer votre commentaire</div>
+                  <q-space />
+                  <q-btn icon="close" flat round dense v-close-popup />
+                </q-card-section>
+                <q-card-section class="row items-center">
+                  <span class="q-mx-md text-justify">
+                    Êtes-vous sûr de vouloir supprimer votre commentaire ? Vous ne
+                    serez plus en mesure de récupérer les informations.
+                  </span>
+                </q-card-section>
+                <q-card-actions align="right">
+                  <q-btn flat label="Annuler" color="primary" v-close-popup />
+                  <q-btn
+                    flat
+                    label="Je suis sûr"
+                    color="negative"
+                    @click="deleteComment(comment.commentId)"
+                  />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
               <div>
                 {{ comment.commentMessage }}
               </div>
@@ -128,6 +177,8 @@ export default {
     comment: [],
     numcomment: "",
     comErr: false,
+    confirmDeletePost: false,
+    confirmDeleteComm: false,
   }),
 
   props: {
