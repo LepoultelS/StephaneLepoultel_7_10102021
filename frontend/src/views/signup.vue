@@ -45,10 +45,11 @@
                 <q-form class="q-px-md" id="signForm">
                   <q-input
                     :rules="[(val) => !!val || 'Field is required']"
-                    v-model="name"
+                    v-model="firstname"
                     type="text"
-                    label="Nom"
+                    label="Prénom"
                     class="q-py-sm"
+                    @keydown.enter="signup()"
                   >
                     <template v-slot:prepend>
                       <q-icon name="face" />
@@ -56,10 +57,11 @@
                   </q-input>
                   <q-input
                     :rules="[(val) => !!val || 'Field is required']"
-                    v-model="firstname"
+                    v-model="name"
                     type="text"
-                    label="Prénom"
+                    label="Nom"
                     class="q-py-sm"
+                    @keydown.enter="signup()"
                   >
                     <template v-slot:prepend>
                       <q-icon name="face" />
@@ -71,6 +73,7 @@
                     type="email"
                     label="Adresse mail"
                     class="q-py-sm"
+                    @keydown.enter="signup()"
                   >
                     <template v-slot:prepend>
                       <q-icon name="email" />
@@ -83,6 +86,7 @@
                     label="Mot de passe"
                     class="q-py-sm"
                     hint="Au moins 6 caractères, 1 Majuscule et 1 minuscule"
+                    @keydown.enter="signup()"
                   >
                     <template v-slot:prepend>
                       <q-icon name="lock" />
