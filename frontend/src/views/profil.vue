@@ -39,18 +39,43 @@
         </div>
         <div v-else class="col">{{ numCom }}<br />commentaires envoyés</div>
       </div>
-      <addPost :user="user" />
-      <div v-for="post in posts" v-bind:key="post.id">
-        <post :post="post" :user="user" />
-      </div>
       <!-- Suppression du compte admin impossible -->
       <div class="text-center" v-if="user.admin != 1">
         <q-btn
           class="text-white col-xl bg-negative q-my-lg"
-          @click="deleteUser()"
+          @click="confirmDeleteUser = true"
         >
           Supprimer le compte
         </q-btn>
+      </div>
+      <q-dialog v-model="confirmDeleteUser" persistent>
+        <q-card>
+          <q-card-section class="row items-center q-pb-none">
+            <div class="text-h6">Supprimer votre compte</div>
+            <q-space />
+            <q-btn icon="close" flat round dense v-close-popup />
+          </q-card-section>
+          <q-card-section class="row items-center">
+            <span class="q-mx-md text-justify">
+              Êtes-vous sûr de vouloir supprimer votre compte ? Cela supprimera
+              automatiquement tous vos posts et commentaires. Vous ne serez plus
+              en mesure de récupérer vos informations.
+            </span>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat label="Annuler" color="primary" v-close-popup />
+            <q-btn
+              flat
+              label="Je suis sûr"
+              color="negative"
+              @click="deleteUser()"
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+      <addPost :user="user" />
+      <div v-for="post in posts" v-bind:key="post.id">
+        <post :post="post" :user="user" />
       </div>
     </q-page-container>
   </q-layout>
@@ -76,6 +101,7 @@ export default {
       userId: "",
       numPosts: 0,
       numCom: 0,
+      confirmDeleteUser: false,
     };
   },
 
