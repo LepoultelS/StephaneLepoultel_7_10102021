@@ -94,6 +94,18 @@
                   </q-input>
                 </q-form>
               </q-card-section>
+              <q-banner
+                v-if="signErr"
+                inline-actions
+                class="q-ma-lg text-white bg-negative"
+              >
+                Erreur dans l'inscription, veuillez réessayer !
+                <template v-slot:action>
+                  <q-btn flat color="white" @click="signErr = false">
+                    <q-icon name="close" />
+                  </q-btn>
+                </template>
+              </q-banner>
               <q-card-actions class="q-pa-lg">
                 <q-btn
                   unelevated
@@ -123,6 +135,7 @@ export default {
     email: "",
     password: "",
     isConnect: false,
+    signErr: false,
   }),
 
   created() {
@@ -161,10 +174,11 @@ export default {
           password: this.password,
         },
       })
-        .then(function() {
+        .then(() => {
           router.push({ path: "/login" });
         })
-        .catch(function(erreur) {
+        .catch((erreur) => {
+          this.signErr = true;
           console.log(erreur);
         });
     },

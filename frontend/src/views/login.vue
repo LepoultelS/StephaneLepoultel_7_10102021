@@ -66,6 +66,18 @@
                     </template>
                   </q-input>
                 </q-form>
+                <q-banner
+                  v-if="authErr"
+                  inline-actions
+                  class="text-white bg-negative"
+                >
+                  Adresse mail ou mot de passe incorrect, veuillez réessayer !
+                  <template v-slot:action>
+                    <q-btn flat color="white" @click="authErr = false">
+                      <q-icon name="close" />
+                    </q-btn>
+                  </template>
+                </q-banner>
               </q-card-section>
               <q-card-section>
                 <div class="text-center q-pa-md q-gutter-md">
@@ -129,6 +141,7 @@ export default {
     email: "",
     password: "",
     isConnect: false,
+    authErr: false,
   }),
 
   created() {
@@ -165,7 +178,7 @@ export default {
           password: this.password,
         },
       })
-        .then(function(response) {
+        .then((response) => {
           console.log("connecté");
           const groupomaniaUser = {
             token: response.data.token,
@@ -176,7 +189,8 @@ export default {
           );
           router.push({ path: "/" });
         })
-        .catch(function(erreur) {
+        .catch((erreur) => {
+          this.authErr = true;
           console.log(erreur, "Problème de connexion");
         });
     },
