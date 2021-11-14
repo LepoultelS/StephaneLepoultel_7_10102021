@@ -164,23 +164,27 @@ export default {
       console.log("Utilisateur déconnecté !");
     },
     signup() {
-      axios({
-        method: "post",
-        url: "http://localhost:3000/users/signup",
-        data: {
-          name: this.name,
-          firstname: this.firstname,
-          email: this.email,
-          password: this.password,
-        },
-      })
-        .then(() => {
-          router.push({ path: "/login" });
+      if ((this.name, this.firstname, this.email, this.password)) {
+        axios({
+          method: "post",
+          url: "http://localhost:3000/users/signup",
+          data: {
+            name: this.name,
+            firstname: this.firstname,
+            email: this.email,
+            password: this.password,
+          },
         })
-        .catch((erreur) => {
-          this.signErr = true;
-          console.log(erreur);
-        });
+          .then(() => {
+            router.push({ path: "/login" });
+          })
+          .catch((erreur) => {
+            this.signErr = true;
+            console.log(erreur);
+          });
+      } else {
+        this.signErr = true;
+      }
     },
   },
 };

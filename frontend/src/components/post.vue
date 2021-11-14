@@ -74,6 +74,18 @@
               </div>
               <q-separator />
             </div>
+            <q-banner
+              v-if="comErr"
+              inline-actions
+              class="q-mx-lg text-white bg-negative"
+            >
+              Impossible de publier le comentaire, veuillez réessayer !
+              <template v-slot:action>
+                <q-btn flat color="white" @click="comErr = false">
+                  <q-icon name="close" />
+                </q-btn>
+              </template>
+            </q-banner>
             <div
               class="row flex flex-center text-caption text-secondary q-pt-lg"
             >
@@ -115,6 +127,7 @@ export default {
     commentText: "",
     comment: [],
     numcomment: "",
+    comErr: false,
   }),
 
   props: {
@@ -193,23 +206,28 @@ export default {
         });
     },
     addComment() {
-      const token = JSON.parse(localStorage.groupomaniaUser).token;
+      if (this.commentText) {
+        const token = JSON.parse(localStorage.groupomaniaUser).token;
 
-      axios({
-        method: "post",
-        url: "http://localhost:3000/comments",
-        headers: { Authorization: `Bearer ${token}` },
-        data: {
-          postId: this.post.postId,
-          message: this.commentText,
-        },
-      })
-        .then(function() {
-          router.go();
+        axios({
+          method: "post",
+          url: "http://localhost:3000/comments",
+          headers: { Authorization: `Bearer ${token}` },
+          data: {
+            postId: this.post.postId,
+            message: this.commentText,
+          },
         })
-        .catch(function(erreur) {
-          console.log(erreur);
-        });
+          .then(function() {
+            router.go();
+          })
+          .catch(function(erreur) {
+            this.comErr = true;
+            console.log(erreur);
+          });
+      } else {
+        this.comErr = true;
+      }
     },
     getComments() {
       const token = JSON.parse(localStorage.groupomaniaUser).token;

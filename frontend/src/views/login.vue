@@ -170,29 +170,33 @@ export default {
       console.log("Utilisateur déconnecté !");
     },
     login() {
-      axios({
-        method: "post",
-        url: "http://localhost:3000/users/login",
-        data: {
-          email: this.email,
-          password: this.password,
-        },
-      })
-        .then((response) => {
-          console.log("connecté");
-          const groupomaniaUser = {
-            token: response.data.token,
-          };
-          localStorage.setItem(
-            "groupomaniaUser",
-            JSON.stringify(groupomaniaUser)
-          );
-          router.push({ path: "/" });
+      if ((this.email, this.password)) {
+        axios({
+          method: "post",
+          url: "http://localhost:3000/users/login",
+          data: {
+            email: this.email,
+            password: this.password,
+          },
         })
-        .catch((erreur) => {
-          this.authErr = true;
-          console.log(erreur, "Problème de connexion");
-        });
+          .then((response) => {
+            console.log("connecté");
+            const groupomaniaUser = {
+              token: response.data.token,
+            };
+            localStorage.setItem(
+              "groupomaniaUser",
+              JSON.stringify(groupomaniaUser)
+            );
+            router.push({ path: "/" });
+          })
+          .catch((erreur) => {
+            this.authErr = true;
+            console.log(erreur, "Problème de connexion");
+          });
+      } else {
+        this.authErr = true;
+      }
     },
   },
 };

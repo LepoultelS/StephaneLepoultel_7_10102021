@@ -6,6 +6,7 @@
           <q-card-section>
             <q-form class="q-px-md" id="signForm"
               ><q-input
+                :rules="[(val) => !!val || 'Field is required']"
                 dense
                 v-model="title"
                 type="text"
@@ -17,6 +18,7 @@
                 </template>
               </q-input>
               <q-input
+                :rules="[(val) => !!val || 'Field is required']"
                 dense
                 v-model="postText"
                 type="textarea"
@@ -34,6 +36,7 @@
           </q-card-section>
           <q-card-section>
             <q-select
+              :rules="[(val) => !!val || 'Field is required']"
               dense
               outlined
               class="q-px-xl"
@@ -42,6 +45,18 @@
               label="Catégorie"
             />
           </q-card-section>
+          <q-banner
+            v-if="postErr"
+            inline-actions
+            class="q-ma-lg text-white bg-negative"
+          >
+            Impossible de publier le post, veuillez réessayer !
+            <template v-slot:action>
+              <q-btn flat color="white" @click="postErr = false">
+                <q-icon name="close" />
+              </q-btn>
+            </template>
+          </q-banner>
           <q-card-actions class="q-pb-lg q-px-xl">
             <q-btn
               dense
@@ -71,6 +86,7 @@ export default {
     postText: "",
     tag: "",
     tagList: ["travail", "musique", "film", "sortie", "sport", "jeux"],
+    postErr: false,
   }),
 
   props: {
@@ -79,25 +95,29 @@ export default {
 
   methods: {
     post() {
-      const token = JSON.parse(localStorage.groupomaniaUser).token;
-
-      axios({
-        method: "post",
-        url: "http://localhost:3000/posts",
-        headers: { Authorization: `Bearer ${token}` },
-        data: {
-          userId: this.user.id,
-          title: this.title,
-          description: this.postText,
-          tag: this.tag,
-        },
-      })
-        .then(function() {
-          router.go();
+      if ((this.title, this.postText, this.tag)) {
+        const token = JSON.parse(localStorage.groupomaniaUser).token;
+        axios({
+          method: "post",
+          url: "http://localhost:3000/posts",
+          headers: { Authorization: `Bearer ${token}` },
+          data: {
+            userId: this.user.id,
+            title: this.title,
+            description: this.postText,
+            tag: this.tag,
+          },
         })
-        .catch(function(erreur) {
-          console.log(erreur);
-        });
+          .then(() => {
+            router.go();
+          })
+          .catch((erreur) => {
+            this.postErr = true;
+            console.log(erreur);
+          });
+      } else {
+        this.postErr = true;
+      }
     },
   },
 };
