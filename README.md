@@ -6,22 +6,22 @@ Télécharger le repository et suivez les instructions ci-après pour installer 
 
 ## prérequis
 
-* Installer Node.js
-* Installer Vue.js
-* Installer MySQL
+* Installer Node.js `v14.18.1`
+* Installer VueCLI `v4.5.14`
+* Installer MySQL `v8.0.27`
 
 ## Base de données MySQL
 
 * Ouvrez votre terminal,
 * Allez dans le dossier backend : `cd backend`
-* Créez la base de données : `node bdd_config/bdd_config.js`
+* Installez toutes les dépendances du projet : `npm i`
 * Dans le dossier backend, créer un fichier .env contenant : DB_HOST(localhost), DB_USER(votre user), DB_PSWD(votre mot de passe), DB_NAME(groupomania).
+* Créez la base de données : `node bdd_config/bdd_config.js`
 
 ## Installation et démarrage du Backend
 
 * Ouvrez votre terminal,
 * Allez dans le dossier backend : `cd backend` 
-* Installez toutes les dépendances du projet : `npm i`
 * Dans le fichier .env, ajouter JWT_KEY(clé de cryptage pour le token) et JWT_EXPIRATION(expiration du token),
 * Démarrez le serveur Node.js : `npm start`
 
