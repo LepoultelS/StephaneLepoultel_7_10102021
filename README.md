@@ -38,7 +38,7 @@ Télécharger le repository et suivez les instructions ci-après pour installer 
 
 ## Compte Administrateur
 La création d'un compte admin n'étant pas accssible à tout le monde, les comptes créés ne le sont pas.
-Pour être admin il faut le modifier directement dans la base de données, pour ce faire :
+Pour être admin il faut le modifier directement dans la base de données, après avoir créé un premier user grâce au front, pour ce faire :
 * Lancer un terminal,
 * Se connecter à mysql avec la commande : `mysql -u root -p`
 * Renseigner votre mot de passe root,
