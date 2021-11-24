@@ -30,7 +30,7 @@ Télécharger le repository et suivez les instructions ci-après pour installer 
 * Ouvrez votre terminal,
 * Allez dans le dossier backend : `cd frontend`
 * Installez toutes les dépendances du projet : `npm i`
-* Dans le dossier frontend, créer un fichier .env contenant : JWT_KEY(clé de cryptage pour le token),
+* Dans le dossier frontend, créer un fichier .env contenant : VUE_APP_JWT_KEY(clé de cryptage pour le token),
 * Démarrez l'application : `npm run serve`
 
 ## Testez l'application
