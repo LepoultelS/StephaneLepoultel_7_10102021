@@ -15,14 +15,13 @@ Télécharger le repository et suivez les instructions ci-après pour installer 
 * Ouvrez votre terminal,
 * Allez dans le dossier backend : `cd backend`
 * Installez toutes les dépendances du projet : `npm i`
-* Dans le dossier backend, créer un fichier .env contenant : DB_HOST(localhost), DB_USER(votre user), DB_PSWD(votre mot de passe), DB_NAME(groupomania).
+* Dans le dossier backend, remplissez le fichier .env contenant : DB_HOST(localhost), DB_USER(votre user), DB_PSWD(votre mot de passe), DB_NAME(groupomania).
 * Créez la base de données : `node bdd_config/bdd_config.js`
 
 ## Installation et démarrage du Backend
 
 * Ouvrez votre terminal,
-* Allez dans le dossier backend : `cd backend` 
-* Dans le fichier .env, ajouter JWT_KEY(clé de cryptage pour le token) et JWT_EXPIRATION(expiration du token),
+* Allez dans le dossier backend : `cd backend`
 * Démarrez le serveur Node.js : `npm start`
 
 ## Installation et démarrage du Frontend

@@ -8,7 +8,7 @@ const userValidator = require("./user-regex");
 // Décode le token et récupère le UserID et le niveau d'acces
 let decodeToken = function (req) {
   let token = req.headers.authorization.split(" ")[1];
-  let decodedToken = jwt.verify(token, process.env.JWT_KEY);
+  let decodedToken = jwt.verify(token, process.env.VUE_APP_JWT_KEY);
   decodedToken = [decodedToken.userId, decodedToken.admin];
   return decodedToken;
 };
@@ -41,8 +41,8 @@ exports.signup = (req, res, next) => {
               message: "L'utilisateur a été créé avec succès !",
               token: jwt.sign(
                 { userId: user.insertId, admin: 0 },
-                process.env.JWT_KEY,
-                { expiresIn: process.env.JWT_EXPIRATION }
+                process.env.VUE_APP_JWT_KEY,
+                { expiresIn: process.env.VUE_APP_JWT_EXPIRATION }
               ),
             });
           } else {
@@ -98,8 +98,8 @@ exports.login = (req, res, next) => {
             userId: user._id,
             token: jwt.sign(
               { userId: user[0].id, admin: user[0].admin },
-              process.env.JWT_KEY,
-              { expiresIn: process.env.JWT_EXPIRATION }
+              process.env.VUE_APP_JWT_KEY,
+              { expiresIn: process.env.VUE_APP_JWT_EXPIRATION }
             ),
           });
         })

@@ -6,7 +6,7 @@ const bdd = require("../bdd_config/bdd_connexion");
 // Décode le token et récupère le UserID et le niveau d'acces
 let decodeToken = function (req) {
   let token = req.headers.authorization.split(" ")[1];
-  let decodedToken = jwt.verify(token, process.env.JWT_KEY);
+  let decodedToken = jwt.verify(token, process.env.VUE_APP_JWT_KEY);
   decodedToken = [decodedToken.userId, decodedToken.admin];
   return decodedToken;
 };
